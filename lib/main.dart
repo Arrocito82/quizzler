@@ -18,7 +18,7 @@ class QuizzlerApp extends StatelessWidget {
               "Quizzler",
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontFamily: "Poppings",
+                fontFamily: "Poppins",
                 fontSize: 30.0,
               ),
             ),
@@ -69,7 +69,7 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
     ),
   ];
   List<bool> answers = [];
-  int anwserNumber = 0;
+  int questionNumber = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -104,13 +104,13 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Expanded(
+            Expanded(
               flex: 4,
               child: Center(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 0),
                   child: Text(
-                    "This is where the question text will go.",
+                    questions[questionNumber].getQuestion(),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 25.0,
@@ -125,7 +125,12 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      answers.add(true);
+                      questionNumber++;
+                    });
+                  },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith(
                         getColorSuccessButton),
@@ -135,7 +140,7 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20.0,
-                      fontFamily: "Poppings",
+                      fontFamily: "Poppins",
                     ),
                   ),
                 ),
@@ -146,7 +151,12 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      answers.add(false);
+                      questionNumber++;
+                    });
+                  },
                   style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.resolveWith(getColorDangerButton),
@@ -156,7 +166,7 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20.0,
-                      fontFamily: "Poppings",
+                      fontFamily: "Poppins",
                     ),
                   ),
                 ),
