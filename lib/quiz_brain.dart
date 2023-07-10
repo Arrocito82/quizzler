@@ -29,12 +29,14 @@ class QuizBrain {
         true),
   ];
 
-  /**
-   * Params: questionNumber begins at 1
-   */
-  Question getQuestion(int questionNumber) => _questions[questionNumber];
-  bool getQuestionAnswer(int questionNumber) =>
-      _questions[questionNumber].getAnswer();
-  String getQuestionText(int questionNumber) =>
-      _questions[questionNumber].getQuestion();
+  int _questionNumber = 0;
+
+  Question getQuestion() => _questions[_questionNumber];
+  bool getQuestionAnswer() => _questions[_questionNumber].getAnswer();
+  String getQuestionText() => _questions[_questionNumber].getQuestion();
+  void nextQuestion() {
+    if (_questionNumber < _questions.length - 1) {
+      _questionNumber++;
+    }
+  }
 }

@@ -57,7 +57,6 @@ class QuizzlerPage extends StatefulWidget {
 
 class _QuizzlerPageState extends State<QuizzlerPage> {
   List<bool> userAnswers = [];
-  int questionNumber = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +97,7 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 0),
                   child: Text(
-                    quizBrain.getQuestionText(questionNumber),
+                    quizBrain.getQuestionText(),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 25.0,
@@ -116,7 +115,7 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
                   onPressed: () {
                     setState(() {
                       userAnswers.add(true);
-                      questionNumber++;
+                      quizBrain.nextQuestion();
                     });
                   },
                   style: ButtonStyle(
@@ -142,7 +141,7 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
                   onPressed: () {
                     setState(() {
                       userAnswers.add(false);
-                      questionNumber++;
+                      quizBrain.nextQuestion();
                     });
                   },
                   style: ButtonStyle(
