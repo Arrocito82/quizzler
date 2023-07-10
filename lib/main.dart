@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:quizzler/question.dart';
+import 'package:quizzler/quiz_brain.dart';
 
 void main() {
   runApp(const QuizzlerApp());
 }
+
+QuizBrain quizBrain = QuizBrain();
 
 class QuizzlerApp extends StatelessWidget {
   const QuizzlerApp({super.key});
@@ -54,21 +56,7 @@ class QuizzlerPage extends StatefulWidget {
 }
 
 class _QuizzlerPageState extends State<QuizzlerPage> {
-  List<Question> questions = [
-    Question(
-      'You can lead a cow down stairs but not up stairs.',
-      false,
-    ),
-    Question(
-      'Approximately one quarter of human bones are in the feet.',
-      true,
-    ),
-    Question(
-      'A slug\'s blood is green.',
-      true,
-    ),
-  ];
-  List<bool> answers = [];
+  List<bool> userAnswers = [];
   int questionNumber = 0;
 
   @override
@@ -110,7 +98,7 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 0),
                   child: Text(
-                    questions[questionNumber].getQuestion(),
+                    quizBrain.getQuestionText(questionNumber),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 25.0,
@@ -127,7 +115,7 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
                 child: TextButton(
                   onPressed: () {
                     setState(() {
-                      answers.add(true);
+                      userAnswers.add(true);
                       questionNumber++;
                     });
                   },
@@ -153,7 +141,7 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
                 child: TextButton(
                   onPressed: () {
                     setState(() {
-                      answers.add(false);
+                      userAnswers.add(false);
                       questionNumber++;
                     });
                   },
