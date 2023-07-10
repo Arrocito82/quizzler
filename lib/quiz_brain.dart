@@ -28,7 +28,7 @@ class QuizBrain {
         'In West Virginia, USA, if you accidentally hit an animal with your car, you are free to take it home to eat.',
         true),
   ];
-
+  // _ means the var in private
   int _questionNumber = 0;
 
   Question getQuestion() => _questions[_questionNumber];
@@ -38,5 +38,9 @@ class QuizBrain {
     if (_questionNumber < _questions.length - 1) {
       _questionNumber++;
     }
+  }
+
+  int count() {
+    return _questions.length;
   }
 }

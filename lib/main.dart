@@ -56,7 +56,24 @@ class QuizzlerPage extends StatefulWidget {
 }
 
 class _QuizzlerPageState extends State<QuizzlerPage> {
-  List<bool> userAnswers = [];
+  int wrongAnswersCounter = 0;
+  int rightAnswersCounter = 0;
+  bool areQuestionsRemaining() {
+    return wrongAnswersCounter + rightAnswersCounter < quizBrain.count();
+  }
+
+  void checkAnswer(bool userPickedAnswer) {
+    setState(() {
+      if (areQuestionsRemaining()) {
+        if (userPickedAnswer == quizBrain.getQuestionAnswer()) {
+          rightAnswersCounter++;
+        } else {
+          wrongAnswersCounter++;
+        }
+      }
+      quizBrain.nextQuestion();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,10 +130,7 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
                 padding: const EdgeInsets.all(16.0),
                 child: TextButton(
                   onPressed: () {
-                    setState(() {
-                      userAnswers.add(true);
-                      quizBrain.nextQuestion();
-                    });
+                    checkAnswer(true);
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith(
@@ -139,10 +153,7 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
                 padding: const EdgeInsets.all(16.0),
                 child: TextButton(
                   onPressed: () {
-                    setState(() {
-                      userAnswers.add(false);
-                      quizBrain.nextQuestion();
-                    });
+                    checkAnswer(false);
                   },
                   style: ButtonStyle(
                     backgroundColor:
@@ -159,6 +170,70 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
                 ),
               ),
             ),
+            // Divider(
+            //   color: Colors.white,
+            //   thickness: 2,
+            // ),
+            Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Scores",
+                        style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: "Poppins",
+                            color: Colors.white),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            '$rightAnswersCounter',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w900),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 12.0),
+                            child: Icon(
+                              Icons.check,
+                              color: Colors.green,
+                              weight: 12.0,
+                              size: 30.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            '$wrongAnswersCounter',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w900),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 12.0),
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.redAccent,
+                              weight: 12.0,
+                              size: 30.0,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ))
           ],
         ),
       ),
