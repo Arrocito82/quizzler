@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizzler/question.dart';
 
 void main() {
   runApp(const QuizzlerApp());
@@ -13,7 +14,7 @@ class QuizzlerApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
           appBar: AppBar(
-            title: Text(
+            title: const Text(
               "Quizzler",
               style: TextStyle(
                 fontWeight: FontWeight.w600,
@@ -22,14 +23,14 @@ class QuizzlerApp extends StatelessWidget {
               ),
             ),
             titleSpacing: 8.0,
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
+            leading: const Padding(
+              padding: EdgeInsets.only(left: 8.0),
               child: ImageIcon(AssetImage("images/quizzler-logo.png")),
             ),
             toolbarHeight: 60.0,
             leadingWidth: 40.0,
             flexibleSpace: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -40,7 +41,7 @@ class QuizzlerApp extends StatelessWidget {
               ),
             ),
           ),
-          body: QuizzlerPage()),
+          body: const QuizzlerPage()),
     );
   }
 }
@@ -53,6 +54,23 @@ class QuizzlerPage extends StatefulWidget {
 }
 
 class _QuizzlerPageState extends State<QuizzlerPage> {
+  List<Question> questions = [
+    Question(
+      'You can lead a cow down stairs but not up stairs.',
+      false,
+    ),
+    Question(
+      'Approximately one quarter of human bones are in the feet.',
+      true,
+    ),
+    Question(
+      'A slug\'s blood is green.',
+      true,
+    ),
+  ];
+  List<bool> answers = [];
+  int anwserNumber = 0;
+
   @override
   Widget build(BuildContext context) {
     Color getColorDangerButton(Set<MaterialState> states) {
@@ -81,17 +99,16 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
 
     return SafeArea(
       child: Container(
-        color: Color.fromRGBO(1, 48, 70, 1.0),
+        color: const Color.fromRGBO(1, 48, 70, 1.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Expanded(
+            const Expanded(
               flex: 4,
               child: Center(
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24.0, vertical: 0),
+                  padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 0),
                   child: Text(
                     "This is where the question text will go.",
                     style: TextStyle(
@@ -109,17 +126,17 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
                 padding: const EdgeInsets.all(16.0),
                 child: TextButton(
                   onPressed: () {},
-                  child: Text(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith(
+                        getColorSuccessButton),
+                  ),
+                  child: const Text(
                     "True",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20.0,
                       fontFamily: "Poppings",
                     ),
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        getColorSuccessButton),
                   ),
                 ),
               ),
@@ -130,17 +147,17 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
                 padding: const EdgeInsets.all(16.0),
                 child: TextButton(
                   onPressed: () {},
-                  child: Text(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.resolveWith(getColorDangerButton),
+                  ),
+                  child: const Text(
                     "False",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20.0,
                       fontFamily: "Poppings",
                     ),
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.resolveWith(getColorDangerButton),
                   ),
                 ),
               ),
