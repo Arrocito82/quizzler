@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizzler/quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 void main() {
   runApp(const QuizzlerApp());
@@ -58,9 +59,23 @@ class QuizzlerPage extends StatefulWidget {
 class _QuizzlerPageState extends State<QuizzlerPage> {
   int wrongAnswersCounter = 0;
   int rightAnswersCounter = 0;
+  bool reviewMode = false;
+
   bool areQuestionsRemaining() {
     return wrongAnswersCounter + rightAnswersCounter < quizBrain.count();
   }
+
+  void restartQuiz() {
+    Navigator.pop(context);
+    setState(() {
+      wrongAnswersCounter = 0;
+      rightAnswersCounter = 0;
+      quizBrain.restart();
+    });
+  }
+
+  void previousQuestion() => quizBrain.previousQuestion();
+  void nextQuestion() => quizBrain.nextQuestion();
 
   void checkAnswer(bool userPickedAnswer) {
     setState(() {
@@ -70,9 +85,100 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
         } else {
           wrongAnswersCounter++;
         }
+      } else {
+        displayResults();
       }
       quizBrain.nextQuestion();
     });
+  }
+
+  DialogButton getReviewButton() => DialogButton(
+        child: Text(
+          "Review",
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+        onPressed: reviewQuiz,
+        color: Colors.grey.shade600,
+      );
+
+  DialogButton getRestartButton() => DialogButton(
+        child: Text(
+          "Restart",
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+        onPressed: restartQuiz,
+        color: Colors.blue,
+      );
+
+  void displayOptions() {
+    List<DialogButton> buttons = [];
+    //TODO: if all questions are answered then you can review the questions
+    if (!areQuestionsRemaining()) {
+      buttons.add(getReviewButton());
+    }
+    buttons.add(getRestartButton());
+    Alert(
+      context: context,
+      title: "Options",
+      type: AlertType.warning,
+      buttons: buttons,
+    ).show();
+  }
+
+  void displayResults() {
+    List<DialogButton> buttons = [];
+    Icon resultIcon = Icon(
+      Icons.sentiment_very_dissatisfied,
+      size: 50.0,
+      color: Colors.red,
+    );
+
+    String description =
+        "Oops! Try again! \nRestart the quiz and give it another shot. \nYou've got this!";
+    buttons.add(getReviewButton());
+    buttons.add(getRestartButton());
+    if (rightAnswersCounter / quizBrain.count() >= 0.7) {
+      resultIcon = Icon(
+        Icons.emoji_events_sharp,
+        size: 50.0,
+        color: Colors.amber,
+      );
+      ;
+      description =
+          "Congratulations, winner!\nYou're a quiz master!\nShare your victory and keep the knowledge flowing. \nWell done!";
+    }
+    Widget results = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                resultIcon,
+                Text(
+                  "$rightAnswersCounter/${quizBrain.count()}",
+                  style: TextStyle(
+                    fontSize: 40.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Text(
+            description,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    Alert(
+      context: context,
+      title: "Results",
+      content: results,
+      buttons: buttons,
+    ).show();
   }
 
   @override
@@ -108,6 +214,21 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Expanded(
+                child: Container(
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(right: 8.0),
+                    child: TextButton(
+                      onPressed: () {
+                        displayOptions();
+                      },
+                      child: Icon(
+                        Icons.more_vert,
+                        size: 20.0,
+                        weight: 16.0,
+                        color: Colors.white,
+                      ),
+                    ))),
             Expanded(
               flex: 4,
               child: Center(
@@ -177,7 +298,7 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
             Expanded(
                 flex: 1,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -238,5 +359,9 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
         ),
       ),
     );
+  }
+
+  void reviewQuiz() {
+    Navigator.pop(context);
   }
 }

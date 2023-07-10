@@ -34,10 +34,21 @@ class QuizBrain {
   Question getQuestion() => _questions[_questionNumber];
   bool getQuestionAnswer() => _questions[_questionNumber].getAnswer();
   String getQuestionText() => _questions[_questionNumber].getQuestion();
+
   void nextQuestion() {
     if (_questionNumber < _questions.length - 1) {
       _questionNumber++;
     }
+  }
+
+  void previousQuestion() {
+    if (_questionNumber > 0) {
+      _questionNumber--;
+    }
+  }
+
+  void restart() {
+    _questionNumber = 0;
   }
 
   int count() {
