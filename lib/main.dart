@@ -245,7 +245,7 @@ class _QuizzlerPageState extends State<QuizzlerPage> {
                 },
                 child: Icon(
                   Icons.more_vert,
-                  size: 20.0,
+                  size: 35.0,
                   weight: 16.0,
                   color: Colors.white,
                 ),
